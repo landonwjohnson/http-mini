@@ -30,35 +30,75 @@ class App extends Component {
   }
 
   getVehicles() {
-    // axios (GET)
-    // setState with response -> vehiclesToDisplay
+    axios.get('https://joes-autos.herokuapp.com/api/vehicles')
+    .then(res => {
+      if (res.status === 200) {
+        this.setState({ vehiclesToDisplay: res.data })
+      } else {
+        ToastStore.error('Cannot get vehicles', 3000)
+      }
+    })
   }
 
   getPotentialBuyers() {
-    // axios (GET)
-    // setState with response -> buyersToDisplay
+    axios.get('https://joes-autos.herokuapp.com/api/buyers')
+    .then(res => {
+      if (res.status === 200) {
+        this.setState({ buyersToDisplay: res.data })
+      } else {
+        ToastStore.error('Cannot get potential buyers', 3000)
+      }
+    })
   }
 
   sellCar(id) {
-    // axios (DELETE)
-    // setState with response -> vehiclesToDisplay
+    axios.delete('https://joes-autos.herokuapp.com/api/buyers/' + id)
+    .then(res => {
+      if (res.status === 200) {
+        this.setState({ buyersToDisplay: res.data })
+      } else {
+        ToastStore.error('Cannot delete id', 3000)
+      }
+    })
   }
 
   filterByMake() {
     let make = this.refs.selectedMake.value
     // axios (GET)
-    // setState with response -> vehiclesToDisplay
+    axios.get('https://joes-autos.herokuapp.com/api/vehicles/' + make)
+    .then( res => {
+      if (res.status === 200) {
+        this.setState({ vehiclesToDisplay: res.data });
+      } else {
+        ToastStore.error('Cannot get make', 3000)
+      }
+    })
   }
 
   filterByColor() {
     let color = this.refs.selectedColor.value;
     // axios (GET)
+    axios.get('https://joes-autos.herokuapp.com/api/vehicles/' + color)
     // setState with response -> vehiclesToDisplay
+    .then( res => {
+      if (res.status === 200) {
+        this.setState({ vehiclesToDisplay: res.data });
+      } else {
+        ToastStore.error('Cannot get color', 3000)
+      }
+    })
   }
 
-  updatePrice(priceChange) {
-    // axios (PUT)
-    // setState with response -> vehiclesToDisplay
+  updatePrice(priceChange, id) {
+    axios.put('https://joes-autos.herokuapp.com/api/vehicles/' + id + '/' + priceChange)
+    // setState with response -> 
+    .then( res => {
+      if (res.status === 200) {
+        this.setState({ vehiclesToDisplay: res.data.vehicles });
+      } else {
+        ToastStore.error('More code issues', 3000);
+      }
+    })
   }
 
   addCar(){
@@ -71,6 +111,18 @@ class App extends Component {
   }  
   // axios (POST)
   // setState with response -> vehiclesToDisplay
+
+  console.log(this.refs.make.value);
+  axios.post('https://joes-autos.herokuapp.com/api/vehicles/', newCar)
+  .then( res => {
+    console.log(res.data);
+    if (res.status === 200) {
+      this.setState({ vehiclesToDisplay: res.data.vehicles });
+    } else {
+      ToastStore.error('You got some code issues bro!', 3000)
+    }
+  })
+
 }
 
 addBuyer() {
